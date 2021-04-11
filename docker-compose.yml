@@ -1,0 +1,39 @@
+services:
+    web:
+        image: treydwg/denocker:latest
+        container_name: ${DOCKER_CONTAINER_PREFIX}
+        volumes:
+            - ${DOCKER_DENOCKER_FILES_PATH}:/app
+        ports:
+            - ${DOCKER_DENOCKER_PORT}:8080
+    db:
+        image: postgres
+        container_name: ${DOCKER_CONTAINER_PREFIX}-postgres
+        restart: always
+        volumes:
+            - ./postgres-data:/var/lib/postgresql/data
+        ports:
+            - "${DOCKER_POSTGRES_LOCAL_PORT}:${DOCKER_POSTGRES_CONTAINER_PORT}"
+        environment: 
+            POSTGRES_DB: ${DOCKER_POSTGRES_DB}
+            POSTGRES_USER: ${DOCKER_POSTGRES_USER}
+            POSTGRES_PASSWORD: ${DOCKER_POSTGRES_PASSWORD}
+        networks:
+            common: 
+    
+    pgadmin:
+        container_name: ${DOCKER_CONTAINER_PREFIX}-pgadmin
+        image: treydwg/pgadmin
+        volumes:
+            - ./pgadmin-backups:/var/lib/pgadmin
+        restart: always
+        environment:
+            PGADMIN_DEFAULT_EMAIL: ${DOCKER_PGADMIN_DEFAULT_EMAIL}
+            PGADMIN_DEFAULT_PASSWORD: ${DOCKER_PGADMIN_DEFAULT_PASSWORD}
+        ports:
+        - "5050:80"
+        networks:
+            common:
+networks:
+    common:
+    

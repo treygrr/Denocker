@@ -1,0 +1,11 @@
+FROM ubuntu:20.04
+RUN apt update
+RUN apt upgrade -y
+RUN apt install bash -y
+RUN apt install nano -y
+RUN apt install curl -y
+RUN apt install unzip -y
+RUN mkdir app
+RUN curl -fsSL https://deno.land/x/install/install.sh | sh -s v1.8.3
+ENV PATH="/root/.deno/bin:$PATH"
+CMD tail -f /dev/null
